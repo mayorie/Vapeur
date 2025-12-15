@@ -1,0 +1,49 @@
+<h1>{{title}}</h1>
+
+<form action="{{action}}" method="POST">
+  <label>
+    Titre<br>
+    <input type="text" name="title" required>
+  </label>
+  <br>
+
+  <label>
+    Description<br>
+    <textarea name="description" rows="4" required></textarea>
+  </label>
+  <br>
+
+  <label>
+    Date de sortie<br>
+    <input type="date" name="releaseDate" required>
+  </label>
+  <br>
+
+  <label>
+    Genre<br>
+    <select name="genreId" required>
+      {{#each genres}}
+        <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <br>
+
+  <label>
+    Éditeur<br>
+    <select name="publisherId" required>
+      {{#each publishers}}
+        <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <br>
+
+  <label>
+    <input type="checkbox" name="featured">
+    Mettre en avant (afficher sur la page d'accueil)
+  </label>
+  <br><br>
+
+  <button type="submit">Créer</button>
+</form>

@@ -1,0 +1,18 @@
+<h1>Tous les jeux</h1>
+
+<p>
+  <a href="/games/new">+ Ajouter un jeu</a>
+</p>
+
+{{#if games.length}}
+  <ul>
+    {{#each games}}
+      <li>
+        <a href="/games/{{this.id}}">{{this.title}}</a>
+        ({{this.genre.name}} - {{this.publisher.name}})
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>Il n'y a pas encore de jeux.</p>
+{{/if}}

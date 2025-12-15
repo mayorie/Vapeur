@@ -1,0 +1,16 @@
+<h1>{{publisher.name}}</h1>
+
+<h2>Jeux de cet éditeur</h2>
+
+{{#if publisher.games.length}}
+  <ul>
+    {{#each publisher.games}}
+      <li>
+        <a href="/games/{{this.id}}">{{this.title}}</a>
+        ({{this.genre.name}})
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>Il n'y a pas encore de jeux pour cet éditeur.</p>
+{{/if}}

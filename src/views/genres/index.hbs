@@ -1,0 +1,9 @@
+<h1>Genres</h1>
+
+<ul>
+  {{#each genres}}
+    <li>
+      <a href="/genres/{{this.id}}">{{this.name}}</a>
+    </li>
+  {{/each}}
+</ul>
