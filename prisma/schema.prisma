@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 generator client {
@@ -25,6 +25,7 @@ model Game {
   description String
   releaseDate DateTime
   featured    Boolean  @default(false)
+  lien        String?
 
   genreId     Int
   genre       Genre     @relation(fields: [genreId], references: [id])
