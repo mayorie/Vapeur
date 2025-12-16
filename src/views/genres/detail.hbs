@@ -1,13 +1,17 @@
-<h1>{{genre.name}}</h1>
+<h1>{{genre.nom}}</h1>
 
 <h2>Jeux de ce genre</h2>
 
-{{#if genre.games.length}}
+{{#if genre.jeux.length}}
   <ul>
-    {{#each genre.games}}
+    {{#each genre.jeux}}
       <li>
-        <a href="/games/{{this.id}}">{{this.title}}</a>
-        ({{this.publisher.name}})
+        <a href="/games/{{this.jeu.id}}">
+          {{this.jeu.titre}}
+        </a>
+        {{#if this.jeu.editeur}}
+          ({{this.jeu.editeur.nom}})
+        {{/if}}
       </li>
     {{/each}}
   </ul>

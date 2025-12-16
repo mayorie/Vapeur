@@ -13,6 +13,12 @@ npm run start : pour lancer le site
 
 npx prisma studio : prisma studio
 
+## problèmes :
+
+### conflits : 
+
+Modification de la table, donc les HBS ne marchaient plus pour les genre.
+
 ## actions du prof : 
 
 Aller dans le dossier du projet cloné
