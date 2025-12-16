@@ -1,11 +1,14 @@
 <h1>{{title}}</h1>
 
 <form action="{{action}}" method="POST">
+  {{#if editeur}}
+    <input type="hidden" name="_method" value="PUT">
+  {{/if}}
   <label>
     Nom de l'éditeur<br>
-    <input type="text" name="name" required>
+    <input type="text" name="nom" required value="{{#if editeur}}{{editeur.nom}}{{/if}}">
   </label>
-  <br><br>
 
-  <button type="submit">Créer</button>
+  <br><br>
+  <button type="submit">{{#if submitLabel}}{{submitLabel}}{{else}}Créer{{/if}}</button>
 </form>

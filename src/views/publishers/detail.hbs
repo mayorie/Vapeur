@@ -1,13 +1,24 @@
-<h1>{{publisher.name}}</h1>
+<h1>{{editeur.nom}}</h1>
+
+<p>
+  <a href="/editeurs/{{editeur.id}}/edit">Modifier</a>
+  <form action="/editeurs/{{editeur.id}}" method="POST" style="display:inline">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" onclick="return confirm('Supprimer cet éditeur ?')">Supprimer</button>
+  </form>
+</p>
 
 <h2>Jeux de cet éditeur</h2>
 
-{{#if publisher.games.length}}
+{{#if editeur.jeux.length}}
   <ul>
-    {{#each publisher.games}}
+    {{#each editeur.jeux}}
       <li>
-        <a href="/games/{{this.id}}">{{this.title}}</a>
-        ({{this.genre.name}})
+        {{this.titre}}
+        —
+        {{#each this.genres}}
+          {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+        {{/each}}
       </li>
     {{/each}}
   </ul>

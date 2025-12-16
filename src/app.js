@@ -25,7 +25,24 @@ hbs.registerHelper('eq', (a, b) => a === b);
 // --- Middlewares ---
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+
+// Fallback manual override: certaines versions/configs peuvent ne pas
+// détecter `_method` dans `req.body`. On s'assure ici que la méthode
+// est remplacée si le champ est présent.
+app.use((req, res, next) => {
+  if (req.body && req.body._method) {
+    req.method = req.body._method.toUpperCase();
+    delete req.body._method;
+  }
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Debug logging for incoming requests (method, url, parsed body)
+app.use((req, res, next) => {
+  console.log('[REQ]', req.method, req.originalUrl, 'body=', req.body);
+  next();
+});
 
 // --- Routes ---
 
@@ -40,8 +57,8 @@ app.use('/genres', genreRoutes);
 // Jeux
 app.use('/games', gameRoutes);
 
-app.use('/publishers', publisherRoutes);
-
+app.use('/editeurs', publisherRoutes);
+  
 // --- Démarrage du serveur après seed des genres ---
 async function start() {
   try {

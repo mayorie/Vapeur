@@ -1,14 +1,14 @@
 <h1>Éditeurs</h1>
 
 <p>
-  <a href="/publishers/new">+ Ajouter un éditeur</a>
+  <a href="/editeurs/new">+ Ajouter un éditeur</a>
 </p>
 
-{{#if publishers.length}}
+{{#if editeurs.length}}
   <ul>
-    {{#each publishers}}
+    {{#each editeurs}}
       <li>
-        <a href="/publishers/{{this.id}}">{{this.name}}</a>
+        <a href="/editeurs/{{this.id}}">{{this.nom}}</a>
       </li>
     {{/each}}
   </ul>
