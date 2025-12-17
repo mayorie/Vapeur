@@ -2,9 +2,10 @@
 
 ### commandes d'initialisation : 
 
+il faut créer le .env avec l'endroit de la database : DATABASE_URL="file:./dev.db"
+
 npm install : pour installer tout les modules.
 
-il faut créer le .env avec l'endroit de la database : DATABASE_URL="file:./dev.db"
 npx prisma migrate dev : pour création de base de données
 
 npm run start : pour lancer le site
