@@ -17,7 +17,7 @@ module.exports = async function seedGenres(prisma) {
 
   // Sinon, on les crée
   await prisma.genre.createMany({
-    data: DEFAULT_GENRES.map(name => ({ name }))
+    data: DEFAULT_GENRES.map(nom => ({ nom }))
   });
 
   console.log('✅ Genres créés en base');

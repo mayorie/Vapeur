@@ -1,0 +1,22 @@
+<h1>{{game.titre}}</h1>
+
+<p><strong>Éditeur :</strong> {{game.editeur.nom}}</p>
+<p><strong>Date de sortie :</strong> {{game.dateSortie}}</p>
+<p><strong>Description :</strong></p>
+<p>{{game.description}}</p>
+
+{{#if game.genres.length}}
+  <p><strong>Genres :</strong>
+    {{#each game.genres}}
+      {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+    {{/each}}
+  </p>
+{{/if}}
+
+{{#if game.misEnAvant}}
+  <p><em>Ce jeu est mis en avant !</em></p>
+{{/if}}
+
+<p>
+  <a href="/games">← Retour à la liste des jeux</a>
+</p>
