@@ -1,5 +1,5 @@
 {{! publishers/detail.hbs }}
-{{! Message d'erreur/succès - Ajouté pour la gestion de suppression }}
+{{! Message d'erreur/succès }}
 {{#if query.error}}
   <div class="alert {{#if (eq query.error 'hasGames')}}alert-warning{{else}}alert-danger{{/if}}">
     {{#if (eq query.error 'hasGames')}}
@@ -18,6 +18,8 @@
   <div class="alert alert-success">
     {{#if (eq query.success 'update')}}
       Éditeur modifié avec succès !
+    {{else if (eq query.success 'delete')}}
+      Éditeur supprimé avec succès !
     {{/if}}
   </div>
 {{/if}}
@@ -26,8 +28,7 @@
 
 <p>
   <a href="/editeurs/{{editeur.id}}/edit">Modifier</a>
-  <form action="/editeurs/{{editeur.id}}" method="POST" style="display:inline">
-    <input type="hidden" name="_method" value="DELETE">
+  <form action="/editeurs/{{editeur.id}}/delete" method="POST" style="display:inline">
     <button type="submit" onclick="return confirm('Supprimer {{editeur.nom}} ?\n\n{{#if editeur.jeux.length}}ATTENTION : {{editeur.jeux.length}} jeu(x) sont liés à cet éditeur. La suppression échouera.{{/if}}')">
       Supprimer
     </button>

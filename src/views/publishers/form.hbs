@@ -1,14 +1,17 @@
 <h1>{{title}}</h1>
 
-<form action="{{action}}" method="POST">
-  {{#if editeur}}
-    <input type="hidden" name="_method" value="PUT">
-  {{/if}}
-  <label>
-    Nom de l'éditeur<br>
-    <input type="text" name="nom" required value="{{#if editeur}}{{editeur.nom}}{{/if}}">
-  </label>
+{{#if query.error}}
+  <div class="alert alert-danger">
+    Erreur lors de l'enregistrement. Veuillez réessayer.
+  </div>
+{{/if}}
 
-  <br><br>
-  <button type="submit">{{#if submitLabel}}{{submitLabel}}{{else}}Créer{{/if}}</button>
+<form action="{{action}}" method="{{method}}">
+  <div>
+    <label for="nom">Nom de l'éditeur :</label>
+    <input type="text" id="nom" name="nom" value="{{editeur.nom}}" required>
+  </div>
+  
+  <button type="submit">{{submitLabel}}</button>
+  <a href="/editeurs{{#if editeur.id}}/{{editeur.id}}{{/if}}">Annuler</a>
 </form>

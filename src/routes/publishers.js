@@ -94,34 +94,39 @@ router.get('/:id/edit', async (req, res) => {
 
   res.render('publishers/form', {
     title: 'Modifier un éditeur',
-    action: `/editeurs/${id}`,
-    method: 'PUT',
+    action: `/editeurs/${id}/update`,  // CHANGÉ ICI
+    method: 'POST',  // CHANGÉ ICI (plus PUT)
     submitLabel: 'Enregistrer',
     editeur
   })
 })
 
 /**
- * Mise à jour
- * PUT /editeurs/:id
+ * Mise à jour - ROUTE POST SIMPLE (pas PUT)
+ * POST /editeurs/:id/update
  */
-router.put('/:id', async (req, res) => {
+router.post('/:id/update', async (req, res) => {
   const id = Number(req.params.id)
   const { nom } = req.body
 
-  await prisma.editeur.update({
-    where: { id },
-    data: { nom }
-  })
+  try {
+    await prisma.editeur.update({
+      where: { id },
+      data: { nom }
+    })
 
-  res.redirect(`/editeurs/${id}`)
+    res.redirect(`/editeurs/${id}?success=update`)
+  } catch (error) {
+    console.error('Erreur lors de la modification:', error)
+    res.redirect(`/editeurs/${id}/edit?error=update`)
+  }
 })
 
 /**
- * Suppression
- * DELETE /editeurs/:id
+ * Suppression - ROUTE POST SIMPLE (pas DELETE)
+ * POST /editeurs/:id/delete
  */
-router.delete('/:id', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
   const id = Number(req.params.id)
 
   try {
@@ -132,11 +137,10 @@ router.delete('/:id', async (req, res) => {
 
     // Si l'éditeur a des jeux, empêcher la suppression
     if (jeuxCount > 0) {
-      // Rediriger vers la page de l'éditeur avec un message d'erreur
       return res.redirect(`/editeurs/${id}?error=hasGames&count=${jeuxCount}`)
     }
 
-    // Si aucun jeu n'est associé, procéder à la suppression
+    // Si aucun jeu, procéder à la suppression
     await prisma.editeur.delete({ where: { id } })
 
     // Rediriger vers la liste avec un message de succès
@@ -144,12 +148,11 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     console.error('Erreur lors de la suppression:', error)
     
-    // Si c'est une erreur de contrainte de clé étrangère (au cas où)
+    // Gestion des erreurs
     if (error.code === 'P2003') {
       return res.redirect(`/editeurs/${id}?error=foreignKey`)
     }
     
-    // Pour les autres erreurs
     res.redirect(`/editeurs/${id}?error=unknown`)
   }
 })
