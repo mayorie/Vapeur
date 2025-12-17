@@ -5,9 +5,9 @@
 </p>
 
 {{#if games.length}}
-  <ul>
+  <ul id="games-list">
     {{#each games}}
-      <li>
+      <li data-id="{{this.id}}">
         <a href="/games/{{this.id}}">
           <strong>{{this.titre}}</strong>
         </a>
@@ -17,9 +17,38 @@
         {{#each this.genres}}
           {{this.genre.nom}}{{#unless @last}}, {{/unless}}
         {{/each}}
+
+        <button class="delete-btn">Supprimer</button>
       </li>
     {{/each}}
   </ul>
 {{else}}
   <p>Il n'y a pas encore de jeux.</p>
 {{/if}}
+
+<script>
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const li = button.closest('li');
+      const id = li.dataset.id;
+
+      if (!confirm('Voulez-vous vraiment supprimer ce jeu ?')) return;
+
+      try {
+        const response = await fetch(`/games/${id}`, {
+          method: 'DELETE',
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          li.remove(); // supprime l'élément de la liste
+        } else {
+          alert('Erreur lors de la suppression du jeu');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erreur lors de la suppression du jeu');
+      }
+    });
+  });
+</script>

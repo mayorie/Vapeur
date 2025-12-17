@@ -3,19 +3,19 @@
 <form action="{{action}}" method="POST">
   <label>
     Titre<br>
-    <input type="text" name="title" required>
+    <input type="text" name="title" value="{{#if game}}{{game.titre}}{{/if}}" required>
   </label>
   <br>
-  
+
   <label>
     Description<br>
-    <textarea name="description" rows="4" required></textarea>
+    <textarea name="description" rows="4" required>{{#if game}}{{game.description}}{{/if}}</textarea>
   </label>
   <br>
 
   <label>
     Date de sortie<br>
-    <input type="date" name="releaseDate" required>
+    <input type="date" name="releaseDate" value="{{#if game}}{{game.dateSortieISO}}{{/if}}" required>
   </label>
   <br>
 
@@ -31,32 +31,38 @@
       {{#each genres}}
         <tr>
           <td style="text-align:center;">
-            <input type="checkbox" name="genreIds[]" value="{{id}}">
+            <input type="checkbox" name="genreIds[]" value="{{id}}"
+              {{#if ../game}}
+                {{#if (contains ../game.genres id)}}checked{{/if}}
+              {{/if}}
+            >
           </td>
           <td>{{nom}}</td>
         </tr>
       {{/each}}
     </tbody>
   </table>
-<br>
-
   <br>
 
   <label>
     Éditeur<br>
     <select name="editeurId" required>
       {{#each editeurs}}
-        <option value="{{id}}">{{nom}}</option>
+        <option value="{{id}}"
+          {{#if ../game}}
+            {{#ifEquals ../game.editeurId id}}selected{{/ifEquals}}
+          {{/if}}
+        >{{nom}}</option>
       {{/each}}
     </select>
   </label>
   <br>
 
   <label>
-    <input type="checkbox" name="featured">
+    <input type="checkbox" name="featured" {{#if game}}{{#if game.misEnAvant}}checked{{/if}}{{/if}}>
     Mettre en avant (afficher sur la page d'accueil)
   </label>
   <br><br>
 
-  <button type="submit">Créer</button>
+  <button type="submit">{{#if game}}Modifier{{else}}Créer{{/if}}</button>
 </form>

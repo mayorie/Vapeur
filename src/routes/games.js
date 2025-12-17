@@ -52,7 +52,7 @@ router.get('/new', async (req, res) => {
  * Création d'un jeu : POST /games
  */
 router.post('/', async (req, res) => {
-  const { title, description, releaseDate, genreId, editeurId, featured } = req.body;
+  const { title, description, releaseDate, genreIds, editeurId, featured } = req.body;
 
   await prisma.jeu.create({
     data: {
@@ -64,17 +64,69 @@ router.post('/', async (req, res) => {
         connect: { id: Number(editeurId) }
       },
       genres: {
-        create: {
+        create: genreIds.map(id => ({
           genre: {
-            connect: { id: Number(genreId) }
+            connect: { id: Number(id) }
           }
+        }))
+      }
+    }
+  });
+
+
+  res.redirect('/games');
+});
+
+/**
+ * Détail d'un jeu : GET /games/:id
+ */
+router.get('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+
+  const game = await prisma.jeu.findUnique({
+    where: { id },
+    include: {
+      editeur: true,
+      genres: {
+        include: {
+          genre: true
         }
       }
     }
   });
 
-  res.redirect('/games');
+  if (!game) {
+    return res.status(404).send('Jeu introuvable');
+  }
+
+  res.render('games/detail', {
+    title: `Détail de ${game.titre}`,
+    game
+  });
 });
 
+/**
+ * Suppression d'un jeu : DELETE /games/:id
+ */
+router.delete('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+
+  try {
+    // Supprime d'abord toutes les relations avec les genres
+    await prisma.jeuGenre.deleteMany({
+      where: { jeuId: id }
+    });
+
+    // Supprime ensuite le jeu
+    await prisma.jeu.delete({
+      where: { id }
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Erreur lors de la suppression du jeu' });
+  }
+});
 
 module.exports = router;
