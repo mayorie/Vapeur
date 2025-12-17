@@ -1,58 +1,278 @@
 {{! publishers/detail.hbs }}
-{{! Message d'erreur/succès }}
-{{#if query.error}}
-  <div class="alert {{#if (eq query.error 'hasGames')}}alert-warning{{else}}alert-danger{{/if}}">
-    {{#if (eq query.error 'hasGames')}}
-      <strong>❌ Suppression impossible !</strong><br>
-      Cet éditeur est lié à {{query.count}} jeu(x).<br>
-      Supprimez d'abord ces jeux ou modifiez-les pour leur attribuer un autre éditeur.
-    {{else if (eq query.error 'foreignKey')}}
-      <strong>Erreur !</strong> Impossible de supprimer cet éditeur car il est lié à des jeux.
-    {{else if (eq query.error 'unknown')}}
-      <strong>Erreur !</strong> Une erreur inconnue s'est produite lors de la suppression.
-    {{/if}}
-  </div>
-{{/if}}
 
-{{#if query.success}}
-  <div class="alert alert-success">
-    {{#if (eq query.success 'update')}}
-      Éditeur modifié avec succès !
-    {{else if (eq query.success 'delete')}}
-      Éditeur supprimé avec succès !
-    {{/if}}
-  </div>
-{{/if}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - Détail de l'éditeur</title>
 
-<h1>{{editeur.nom}}</h1>
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<p>
-  <a href="/editeurs/{{editeur.id}}/edit">Modifier</a>
-  <form action="/editeurs/{{editeur.id}}/delete" method="POST" style="display:inline">
-    <button type="submit" onclick="return confirm('Supprimer {{editeur.nom}} ?\n\n{{#if editeur.jeux.length}}ATTENTION : {{editeur.jeux.length}} jeu(x) sont liés à cet éditeur. La suppression échouera.{{/if}}')">
-      Supprimer
-    </button>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER */
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: #66c0f4;
+    }
+
+    /* CONTENEUR PRINCIPAL */
+    .editeurs-page {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* TITRE */
+    .editeurs-page h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.25rem;
+    }
+
+    /* ALERTS */
+    .alert-success {
+      background-color: #2a3f2a;
+      color: #a8d08d;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .alert-warning {
+      background-color: #664d03;
+      color: #fff3cd;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .alert-danger {
+      background-color: #5c0f0f;
+      color: #f8d7da;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* BOUTONS */
+    .btn-edit, .btn-delete, .back-button {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+      border: none;
+      margin-right: 10px;
+    }
+
+    .btn-edit {
+      background-color: #66c0f4;
+      color: #0d0d14;
+    }
+
+    .btn-edit:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-2px);
+    }
+
+    .btn-delete {
+      background-color: #b22222;
+      color: #fff;
+    }
+
+    .btn-delete:hover {
+      background-color: #cc3333;
+      transform: translateY(-2px);
+    }
+
+    .back-button {
+      margin: 25px 0;
+      background-color: #b22222;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    }
+
+    .back-button:hover {
+      background-color: #cc3333;
+      transform: translateY(-2px);
+    }
+
+    /* LISTE DES JEUX */
+    .editeurs-page ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .editeurs-page li {
+      background-color: #20232a;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .editeurs-page li:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    .editeurs-page li a {
+      color: #66c0f4;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .editeurs-page li a:hover {
+      text-decoration: underline;
+    }
+
+    small {
+      color: #aaa;
+      margin-left: 5px;
+    }
+
+    .empty-message {
+      font-size: 1.1rem;
+      color: #aaa;
+      background-color: #20232a;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      margin-top: 20px;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #171a21;
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<section class="editeurs-page">
+
+  {{!-- Messages d'erreur / succès --}}
+  {{#if query.error}}
+    <div class="alert {{#if (eq query.error 'hasGames')}}alert-warning{{else}}alert-danger{{/if}}">
+      {{#if (eq query.error 'hasGames')}}
+        <strong>❌ Suppression impossible !</strong><br>
+        Cet éditeur est lié à {{query.count}} jeu(x).<br>
+        Supprimez d'abord ces jeux ou modifiez-les pour leur attribuer un autre éditeur.
+      {{else if (eq query.error 'foreignKey')}}
+        <strong>Erreur !</strong> Impossible de supprimer cet éditeur car il est lié à des jeux.
+      {{else if (eq query.error 'unknown')}}
+        <strong>Erreur !</strong> Une erreur inconnue s'est produite lors de la suppression.
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if query.success}}
+    <div class="alert alert-success">
+      {{#if (eq query.success 'update')}}
+        Éditeur modifié avec succès !
+      {{else if (eq query.success 'delete')}}
+        Éditeur supprimé avec succès !
+      {{/if}}
+    </div>
+  {{/if}}
+
+  <h1>{{editeur.nom}}</h1>
+
+  <p>
+    <a href="/editeurs/{{editeur.id}}/edit" class="btn-edit">Modifier</a>
+    <form action="/editeurs/{{editeur.id}}/delete" method="POST" style="display:inline">
+      <button type="submit" class="btn-delete"
+        onclick="return confirm('Supprimer {{editeur.nom}} ?\n\n{{#if editeur.jeux.length}}ATTENTION : {{editeur.jeux.length}} jeu(x) sont liés à cet éditeur. La suppression échouera.{{/if}}')">
+        Supprimer
+      </button>
   </form>
-</p>
+  </p>
 
-<h2>Jeux de cet éditeur</h2>
+  <h2>Jeux de cet éditeur</h2>
 
-{{#if editeur.jeux.length}}
-  <ul>
-    {{#each editeur.jeux}}
-      <li>
-        <a href="/jeux/{{this.id}}">{{this.titre}}</a>
-        —
-        {{#each this.genres}}
-          {{this.genre.nom}}{{#unless @last}}, {{/unless}}
-        {{/each}}
-        <small>({{this.dateSortie}})</small>
-      </li>
-    {{/each}}
-  </ul>
-{{else}}
-  <p>Il n'y a pas encore de jeux pour cet éditeur.</p>
-{{/if}}
+  {{#if editeur.jeux.length}}
+    <ul>
+      {{#each editeur.jeux}}
+        <li>
+          <a href="/jeux/{{this.id}}">{{this.titre}}</a>
+          —
+          {{#each this.genres}}
+            {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+          <small>({{this.dateSortie}})</small>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="empty-message">Il n'y a pas encore de jeux pour cet éditeur.</p>
+  {{/if}}
 
-<hr>
-<p><a href="/editeurs">← Retour à la liste des éditeurs</a></p>
+  <hr>
+  <a href="/editeurs" class="back-button">← Retour à la liste des éditeurs</a>
+
+</section>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+</body>
+</html>

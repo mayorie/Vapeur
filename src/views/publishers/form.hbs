@@ -1,17 +1,175 @@
-<h1>{{title}}</h1>
+{{! publishers/form.hbs }}
 
-{{#if query.error}}
-  <div class="alert alert-danger">
-    Erreur lors de l'enregistrement. Veuillez réessayer.
-  </div>
-{{/if}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - Formulaire Éditeur</title>
 
-<form action="{{action}}" method="{{method}}">
-  <div>
-    <label for="nom">Nom de l'éditeur :</label>
-    <input type="text" id="nom" name="nom" value="{{editeur.nom}}" required>
-  </div>
-  
-  <button type="submit">{{submitLabel}}</button>
-  <a href="/editeurs{{#if editeur.id}}/{{editeur.id}}{{/if}}">Annuler</a>
-</form>
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER */
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: #66c0f4;
+    }
+
+    /* CONTENEUR PRINCIPAL */
+    .editeurs-page {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 0 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* TITRE */
+    .editeurs-page h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+      margin-bottom: 25px;
+    }
+
+    /* ALERT */
+    .alert-danger {
+      background-color: #5c0f0f;
+      color: #f8d7da;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* FORMULAIRE */
+    form {
+      background-color: #20232a;
+      padding: 25px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    form div {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #66c0f4;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #66c0f4;
+    }
+
+    /* BOUTONS */
+    button, .cancel-button {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: background-color 0.3s, transform 0.2s;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #66c0f4;
+      color: #0d0d14;
+    }
+
+    button:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-2px);
+    }
+
+    .cancel-button {
+      background-color: #b22222;
+      color: #fff;
+    }
+
+    .cancel-button:hover {
+      background-color: #cc3333;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #171a21;
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<section class="editeurs-page">
+  <h1>{{title}}</h1>
+
+  {{#if query.error}}
+    <div class="alert alert-danger">
+      Erreur lors de l'enregistrement. Veuillez réessayer.
+    </div>
+  {{/if}}
+
+  <form action="{{action}}" method="{{method}}">
+    <div>
+      <label for="nom">Nom de l'éditeur :</label>
+      <input type="text" id="nom" name="nom" value="{{editeur.nom}}" required>
+    </div>
+
+    <button type="submit">{{submitLabel}}</button>
+    <a href="/editeurs{{#if editeur.id}}/{{editeur.id}}{{/if}}" class="cancel-button">Annuler</a>
+  </form>
+</section>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+</body>
+</html>
