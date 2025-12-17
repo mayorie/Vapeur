@@ -52,6 +52,13 @@ app.get('/', async (req, res) => {
   }
 });
 
+// Middleware pour query parameters - AJOUTÉ ICI
+app.use((req, res, next) => {
+  res.locals.query = req.query;
+  next();
+});
+.
+
 // Liste des genres
 app.use('/genres', genreRoutes);
 
