@@ -56,4 +56,12 @@ async function start() {
   }
 }
 
+hbs.registerHelper('contains', (array, value) => {
+  return array.some(item => item.genreId === value);
+});
+
+hbs.registerHelper('ifEquals', (a, b, options) => {
+  return a === b ? options.fn(this) : options.inverse(this);
+});
+
 start();

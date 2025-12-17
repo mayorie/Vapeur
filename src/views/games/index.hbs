@@ -18,6 +18,10 @@
           {{this.genre.nom}}{{#unless @last}}, {{/unless}}
         {{/each}}
 
+        <a href="/games/new/{{this.id}}">
+          <button class="edit-btn">Modifier</button>
+        </a>
+
         <button class="delete-btn">Supprimer</button>
       </li>
     {{/each}}
@@ -41,7 +45,7 @@
 
         const result = await response.json();
         if (result.success) {
-          li.remove(); // supprime l'élément de la liste
+          li.remove();
         } else {
           alert('Erreur lors de la suppression du jeu');
         }
