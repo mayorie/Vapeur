@@ -8,8 +8,15 @@
   <ul>
     {{#each games}}
       <li>
-        <a href="/games/{{this.id}}">{{this.title}}</a>
-        ({{this.genre.name}} - {{this.publisher.name}})
+        <a href="/games/{{this.id}}">
+          <strong>{{this.titre}}</strong>
+        </a>
+        —
+        {{this.editeur.nom}}
+        —
+        {{#each this.genres}}
+          {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+        {{/each}}
       </li>
     {{/each}}
   </ul>

@@ -6,7 +6,7 @@
     <input type="text" name="title" required>
   </label>
   <br>
-
+  
   <label>
     Description<br>
     <textarea name="description" rows="4" required></textarea>
@@ -19,21 +19,34 @@
   </label>
   <br>
 
-  <label>
-    Genre<br>
-    <select name="genreId" required>
+  <label>Genres</label>
+  <table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Choisir</th>
+        <th>Genre</th>
+      </tr>
+    </thead>
+    <tbody>
       {{#each genres}}
-        <option value="{{this.id}}">{{this.name}}</option>
+        <tr>
+          <td style="text-align:center;">
+            <input type="checkbox" name="genreIds[]" value="{{id}}">
+          </td>
+          <td>{{nom}}</td>
+        </tr>
       {{/each}}
-    </select>
-  </label>
+    </tbody>
+  </table>
+<br>
+
   <br>
 
   <label>
     Éditeur<br>
-    <select name="publisherId" required>
-      {{#each publishers}}
-        <option value="{{this.id}}">{{this.name}}</option>
+    <select name="editeurId" required>
+      {{#each editeurs}}
+        <option value="{{id}}">{{nom}}</option>
       {{/each}}
     </select>
   </label>
