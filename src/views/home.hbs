@@ -1,7 +1,277 @@
-<h1>Bienvenue sur Vapeur</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - Accueil</title>
+  <style>
+    /* RESET & BASE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<p>Application de gestion de collection de jeux vidéo.</p>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
 
-<p>
-  <a href="/genres">Voir les genres disponibles</a>
-</p>
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER */
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+    }
+
+    /* HERO CAROUSEL */
+    .hero {
+      width: 100vw;
+      height: 45vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      background: linear-gradient(120deg, #1f1f2e, #0d0d14);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .carousel {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      border-radius: 0;
+    }
+
+    .slides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 1s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s;
+    }
+
+    .slide:hover img {
+      filter: brightness(50%);
+    }
+
+    .slide .overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    }
+
+    .slide .overlay h2 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    /* SECTION RECHERCHE ET FILTRES */
+    .search-section {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .search-section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #66c0f4;
+    }
+
+    #searchInput, #genreFilter {
+      padding: 10px 15px;
+      font-size: 1rem;
+      margin: 10px 5px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    #searchInput::placeholder {
+      color: #aaa;
+    }
+
+    .game-slider {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .game-card {
+      flex: 0 0 180px;
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .game-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: filter 0.3s;
+    }
+
+    .game-card:hover img {
+      filter: brightness(40%);
+    }
+
+    .game-card .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1em;
+      text-align: center;
+      transition: background-color 0.3s;
+      padding: 10px;
+    }
+
+    .game-card:hover .overlay {
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: #171a21;
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<!-- HERO CAROUSEL -->
+<section class="hero">
+  <div class="carousel">
+    <div class="slides">
+      {{#each gamesfeatured}}
+        <div class="slide">
+          <img src="{{lien}}" alt="{{title}}">
+          <div class="overlay">
+            <h2>{{title}}</h2>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+<!-- ZONE DE RECHERCHE ET FILTRE -->
+<section class="search-section">
+  <h2>Rechercher des jeux</h2>
+
+  <input type="text" id="searchInput" placeholder="Rechercher un jeu..." />
+
+  <select id="genreFilter">
+    <option value="">Tous les genres</option>
+    {{#each genres}}
+      <option value="{{id}}">{{name}}</option>
+    {{/each}}
+  </select>
+
+  <div id="gamesContainer" class="game-slider">
+    {{#each allgames}}
+      <div class="game-card" data-title="{{title}}" data-genre="{{genreId}}">
+        <img src="{{lien}}" alt="{{title}}">
+        <div class="overlay">{{title}}</div>
+      </div>
+    {{/each}}
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+
+<script>
+  // CAROUSEL HERO
+  const slides = document.querySelector('.slides');
+  const totalSlides = document.querySelectorAll('.slide').length;
+  let index = 0;
+
+  function showNextSlide() {
+    index++;
+    if(index >= totalSlides) index = 0;
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  setInterval(showNextSlide, 4000);
+
+  // RECHERCHE ET FILTRE
+  const searchInput = document.getElementById('searchInput');
+  const genreFilter = document.getElementById('genreFilter');
+  const gamesContainer = document.getElementById('gamesContainer');
+  const gameCards = Array.from(gamesContainer.getElementsByClassName('game-card'));
+
+  function filterGames() {
+    const query = searchInput.value.toLowerCase();
+    const genre = genreFilter.value;
+
+    gameCards.forEach(card => {
+      const title = card.dataset.title.toLowerCase();
+      const cardGenre = card.dataset.genre;
+
+      if ((title.includes(query)) && (genre === '' || cardGenre === genre)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterGames);
+  genreFilter.addEventListener('change', filterGames);
+</script>
+
+</body>
+</html>

@@ -30,8 +30,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 // --- Routes ---
 
 // Accueil (on mettra les jeux mis en avant plus tard)
-app.get('/', (req, res) => {
-  res.render('home', { title: 'Accueil' });
+app.get('/', async (req, res) => {
+  try {
+    const gamesfeatured = await prisma.jeu.findMany({
+      where: {
+        misEnAvant: true   // ou misEnAvant: true selon ton schema
+      }
+    });
+    const allgames = await prisma.jeu.findMany();
+    const gen = await prisma.genre.findMany();
+
+    res.render('home', {
+      title: 'Accueil',
+      allgames,
+      gamesfeatured,
+      gen
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
 });
 
 // Liste des genres
