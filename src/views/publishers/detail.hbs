@@ -253,7 +253,7 @@
     <ul>
       {{#each editeur.jeux}}
         <li>
-          <a href="/jeux/{{this.id}}">{{this.titre}}</a>
+          <a href="/games/{{this.id}}">{{this.titre}}</a>
           —
           {{#each this.genres}}
             {{this.genre.nom}}{{#unless @last}}, {{/unless}}

@@ -1,22 +1,155 @@
-<h1>{{game.titre}}</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - {{game.titre}}</title>
 
-<p><strong>Éditeur :</strong> {{game.editeur.nom}}</p>
-<p><strong>Date de sortie :</strong> {{game.dateSortie}}</p>
-<p><strong>Description :</strong></p>
-<p>{{game.description}}</p>
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{{#if game.genres.length}}
-  <p><strong>Genres :</strong>
-    {{#each game.genres}}
-      {{this.genre.nom}}{{#unless @last}}, {{/unless}}
-    {{/each}}
-  </p>
-{{/if}}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
 
-{{#if game.misEnAvant}}
-  <p><em>Ce jeu est mis en avant !</em></p>
-{{/if}}
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-<p>
-  <a href="/games">← Retour à la liste des jeux</a>
-</p>
+    /* HEADER */
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+    }
+
+    /* CONTENU PRINCIPAL */
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .game-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      background-color: #171a21;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .game-detail img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .game-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .game-info h1 {
+      font-size: 2rem;
+      color: #66c0f4;
+    }
+
+    .game-info p {
+      line-height: 1.5;
+    }
+
+    .highlight {
+      font-style: italic;
+      color: #8fd3ff;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #66c0f4;
+      color: #0d0d14;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #171a21;
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<main>
+  <div class="game-detail">
+    <img src="{{game.lien}}" alt="{{game.titre}}">
+    <div class="game-info">
+      <h1>{{game.titre}}</h1>
+      <p><strong>Éditeur :</strong> {{game.editeur.nom}}</p>
+      <p><strong>Date de sortie :</strong> {{game.dateSortie}}</p>
+      <p><strong>Description :</strong></p>
+      <p>{{game.description}}</p>
+
+      {{#if game.genres.length}}
+        <p><strong>Genres :</strong>
+          {{#each game.genres}}
+            {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+        </p>
+      {{/if}}
+
+      {{#if game.misEnAvant}}
+        <p class="highlight">Ce jeu est mis en avant !</p>
+      {{/if}}
+
+      <a class="back-link" href="/games">← Retour à la liste des jeux</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+
+</body>
+</html>

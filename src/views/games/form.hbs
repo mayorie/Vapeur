@@ -1,74 +1,244 @@
-<h1>{{title}}</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - {{title}}</title>
 
-<form action="{{action}}" method="POST">
-  <label>
-    Titre<br>
-    <input type="text" name="title" value="{{#if game}}{{game.titre}}{{/if}}" required>
-  </label>
-  <br>
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <label>
-    Description<br>
-    <textarea name="description" rows="4" required>{{#if game}}{{game.description}}{{/if}}</textarea>
-  </label>
-  <br>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
 
-  <label>
-    Date de sortie<br>
-    <input type="date" name="releaseDate" value="{{#if game}}{{game.dateSortieISO}}{{/if}}" required>
-  </label>
-  <br>
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-  <label>
-    Lien de l'image<br>
-    <input type="url" name="lien" value="{{#if game}}{{game.lien}}{{/if}}" placeholder="https://example.com/image.jpg">
-  </label>
-  <br>
+    input, textarea, select, button {
+      font-family: inherit;
+      font-size: 1rem;
+    }
 
-  <label>Genres</label>
-  <table border="1" cellpadding="5" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Choisir</th>
-        <th>Genre</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each genres}}
+    button {
+      cursor: pointer;
+    }
+
+    /* HEADER */
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+    }
+
+    /* CONTENU PRINCIPAL */
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #66c0f4;
+    }
+
+    form {
+      background-color: #171a21;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="date"],
+    textarea,
+    select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      accent-color: #66c0f4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #444;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #171a21;
+    }
+
+    button[type="submit"] {
+      background-color: #66c0f4;
+      color: #0d0d14;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.3s, transform 0.2s;
+      align-self: flex-start;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #66c0f4;
+      color: #0d0d14;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #171a21;
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<main>
+  <h1>{{title}}</h1>
+
+  <form action="{{action}}" method="POST">
+    <label>
+      Titre
+      <input type="text" name="title" value="{{#if game}}{{game.titre}}{{/if}}" required>
+    </label>
+
+    <label>
+      Description
+      <textarea name="description" rows="4" required>{{#if game}}{{game.description}}{{/if}}</textarea>
+    </label>
+
+    <label>
+      Date de sortie
+      <input type="date" name="releaseDate" value="{{#if game}}{{game.dateSortieISO}}{{/if}}" required>
+    </label>
+
+    <label>
+      Lien de l'image
+      <input type="url" name="lien" value="{{#if game}}{{game.lien}}{{/if}}" placeholder="https://example.com/image.jpg">
+    </label>
+
+    <label>Genres</label>
+    <table>
+      <thead>
         <tr>
-          <td style="text-align:center;">
-            <input type="checkbox" name="genreIds[]" value="{{id}}"
-              {{#if ../game}}
-                {{#if (contains ../game.genres id)}}checked{{/if}}
-              {{/if}}
-            >
-          </td>
-          <td>{{nom}}</td>
+          <th>Choisir</th>
+          <th>Genre</th>
         </tr>
-      {{/each}}
-    </tbody>
-  </table>
-  <br>
+      </thead>
+      <tbody>
+        {{#each genres}}
+          <tr>
+            <td style="text-align:center;">
+              <input type="checkbox" name="genreIds[]" value="{{id}}"
+                {{#if ../game}}
+                  {{#if (contains ../game.genres id)}}checked{{/if}}
+                {{/if}}
+              >
+            </td>
+            <td>{{nom}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-  <label>
-    Éditeur<br>
-    <select name="editeurId" required>
-      {{#each editeurs}}
-        <option value="{{id}}"
-          {{#if ../game}}
-            {{#ifEquals ../game.editeurId id}}selected{{/ifEquals}}
-          {{/if}}
-        >{{nom}}</option>
-      {{/each}}
-    </select>
-  </label>
-  <br>
+    <label>
+      Éditeur
+      <select name="editeurId" required>
+        {{#each editeurs}}
+          <option value="{{id}}"
+            {{#if ../game}}
+              {{#ifEquals ../game.editeurId id}}selected{{/ifEquals}}
+            {{/if}}
+          >{{nom}}</option>
+        {{/each}}
+      </select>
+    </label>
 
-  <label>
-    <input type="checkbox" name="featured" {{#if game}}{{#if game.misEnAvant}}checked{{/if}}{{/if}}>
-    Mettre en avant (afficher sur la page d'accueil)
-  </label>
-  <br><br>
+    <label>
+      <input type="checkbox" name="featured" {{#if game}}{{#if game.misEnAvant}}checked{{/if}}{{/if}}>
+      Mettre en avant (afficher sur la page d'accueil)
+    </label>
 
-  <button type="submit">{{#if game}}Modifier{{else}}Créer{{/if}}</button>
-</form>
+    <button type="submit">{{#if game}}Modifier{{else}}Créer{{/if}}</button>
+  </form>
+
+  <a class="back-link" href="/games">← Retour à la liste des jeux</a>
+</main>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+
+</body>
+</html>
