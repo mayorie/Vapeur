@@ -1,6 +1,8 @@
+//includes
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 
+//création de quoi faire les get et post, ...
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -11,6 +13,7 @@ const prisma = new PrismaClient();
  * Formulaire de création d'un jeu : GET /games/new
  */
 router.get('/new', async (req, res) => {
+  //requetes prisma pour la liste des genres et editeur
   const genres = await prisma.genre.findMany({
     orderBy: { nom: 'asc' }
   });
@@ -19,6 +22,7 @@ router.get('/new', async (req, res) => {
     orderBy: { nom: 'asc' }
   });
 
+  //affichage du template form
   res.render('games/form', {
     title: 'Nouveau jeu',
     genres,
@@ -33,6 +37,7 @@ router.get('/new', async (req, res) => {
 router.get('/new/:id', async (req, res) => {
   const id = Number(req.params.id);
 
+  //récup des données du jeu sur l'id en question
   const game = await prisma.jeu.findUnique({
     where: { id },
     include: {
@@ -54,6 +59,7 @@ router.get('/new/:id', async (req, res) => {
   // Préparer date au format ISO pour <input type="date">
   const dateSortieISO = game.dateSortie.toISOString().split('T')[0];
 
+  //affichage du template form
   res.render('games/form', {
     title: `Modifier ${game.titre}`,
     genres,
@@ -93,6 +99,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * Mise à jour d'un jeu : PUT /games/:id
+ * si on modifie l'un des jeux
  */
 router.put('/:id', async (req, res) => {
   const id = Number(req.params.id);
@@ -131,25 +138,27 @@ router.put('/:id', async (req, res) => {
  * Suppression d'un jeu : DELETE /games/:id
  */
 router.delete('/:id', async (req, res) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id); // Récupère l'ID du jeu depuis l'URL
 
   try {
-    // Supprime d'abord toutes les relations avec les genres
+    // Supprime toutes les liaisons du jeu
     await prisma.jeuGenre.deleteMany({
       where: { jeuId: id }
     });
 
-    // Supprime ensuite le jeu
+    // Supprime du jeu
     await prisma.jeu.delete({
       where: { id }
     });
 
+    // renvoie d'erreur
     res.json({ success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Erreur lors de la suppression du jeu' });
   }
 });
+
 
 /**
  * Liste de tous les jeux : GET /games
@@ -177,6 +186,7 @@ router.get('/', async (req, res) => {
  * Création d'un jeu : POST /games
  */
 router.post('/', async (req, res) => {
+  //ce que l'on reçois de la part du formulaire
   const { title, description, releaseDate, genreIds, editeurId, featured, lien } = req.body;
 
   await prisma.jeu.create({
