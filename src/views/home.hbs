@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vapeur - Accueil</title>
+
+  <style>
+    /* RESET */
+    
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;}
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #f1f1f1;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER /
+    header {
+      background-color: #171a21;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #66c0f4;
+    }
+
+    / HERO /
+    .hero {
+      width: 100vw;
+      height: 45vh;
+      background: linear-gradient(120deg, #1f1f2e, #0d0d14);
+      overflow: hidden;
+    }
+
+    .carousel {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 1s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s;
+    }
+
+    .slide:hover img {
+      filter: brightness(50%);
+    }
+
+    .slide .overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    }
+
+    .slide .overlay h2 {
+      font-size: 2rem;
+    }
+
+    / BOUTONS NAVIGATION /
+    .nav-section {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .nav-buttons a {
+      background-color: #66c0f4;
+      color: #0d0d14;
+      padding: 15px 35px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .nav-buttons a:hover {
+      background-color: #8fd3ff;
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+    }
+
+    / FOOTER /
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #171a21;
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Vapeur</h1>
+</header>
+
+<!-- HERO CAROUSEL -->
+<section class="hero">
+  <div class="carousel">
+    <div class="slides">
+
+      {{#each gamesfeatured}}
+      <div class="slide">
+        <img src="{{lien}}" alt="{{title}}">
+        <div class="overlay">
+          <h2>{{title}}</h2>
+        </div>
+      </div>
+      {{/each}}
+
+    </div>
+  </div>
+</section>
+
+<!-- BOUTONS -->
+<section class="nav-section">
+  <div class="nav-buttons">
+    <a href="/games">📋 Liste des jeux</a>
+    <a href="/genres">🎮 Liste des genres</a>
+    <a href="/editeurs">🏢 Liste des éditeurs</a>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Vapeur - Tous droits réservés
+</footer>
+
+<script>
+  / CAROUSEL AUTOMATIQUE /
+  const slides = document.querySelector('.slides');
+  const totalSlides = document.querySelectorAll('.slide').length;
+  let index = 0;
+
+  function showNextSlide() {
+    index++;
+    if (index >= totalSlides) index = 0;
+    slides.style.transform = `translateX(-${index 100}%)`;
+  }
+
+  setInterval(showNextSlide, 4000);
+</script>
+
+</body>
+</html>
