@@ -13,34 +13,10 @@ npm run start : pour lancer le site
 
 npx prisma studio : prisma studio
 
-## problèmes :
-
-### conflits : 
-
-Modification de la table, donc les HBS ne marchaient plus pour les genre.
-
-## actions du prof : 
-
-Aller dans le dossier du projet cloné
-cd Vapeur
-
-Installer toutes les dépendances du projet
-npm install
-
-Initialiser la base de données Prisma (création du fichier SQLite + migrations)
-npx prisma migrate dev --name init
-
-Générer le client Prisma (si non déjà fait)
-npx prisma generate
-
-Lancer l'application en local
-npm start
-?
-
 ----------------------------------------------------------------------------------------------------------------------
 partage du travail :
 
-#page d'accueil : 
+#page d'accueil :
 
 2-Afficher la liste de tous les jeux sur une page dédiée
 
@@ -78,8 +54,44 @@ partage du travail :
 
 12-Afficher la liste des jeux d'un éditeur sur une page dédiée
 
----------------------------------------------------------------------------------------------------------------
-bd: 
-jeu |id |titre| desc| date |mise en avant| idgenre| id editeur| 
-editeur| id |nom| 
-genre |id |nom|
+-----------------------------------------------------------------------------------------------------
+
+# répartition final du travail : 
+
+## Baptiste : 
+
+Création du menu prinscipale
+
+Affichage des jeux mis en avant
+
+Création des css des fichiers
+
+## Fanny : 
+
+Initialisation du projet
+
+Création de la base du site/création d'un jeu
+
+Affichage de la liste des genres
+
+Affichage des  jeux selon un genre en particulier
+
+## Mathias : 
+
+Création de la base de données du site
+
+Création de la liste des éditeurs
+
+Détail/ ajout/ modification/ supréssion d'un éditeur
+
+Affichage des jeux selon un éditeur
+
+## Sacha : 
+
+Résolution de conflits
+
+Gestion du github
+
+Modification de la liste des jeux
+
+Detail/ ajout/ modification/ supression d'un jeu
