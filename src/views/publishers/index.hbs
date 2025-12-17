@@ -1,5 +1,13 @@
 <h1>Éditeurs</h1>
 
+{{#if query.success}}
+  <div class="alert alert-success">
+    {{#if (eq query.success 'delete')}}
+      Éditeur supprimé avec succès !
+    {{/if}}
+  </div>
+{{/if}}
+
 <p>
   <a href="/editeurs/new">+ Ajouter un éditeur</a>
 </p>

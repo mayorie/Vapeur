@@ -124,9 +124,34 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const id = Number(req.params.id)
 
-  await prisma.editeur.delete({ where: { id } })
+  try {
+    // Vérifier si l'éditeur a des jeux associés
+    const jeuxCount = await prisma.jeu.count({
+      where: { editeurId: id }
+    })
 
-  res.redirect('/editeurs')
+    // Si l'éditeur a des jeux, empêcher la suppression
+    if (jeuxCount > 0) {
+      // Rediriger vers la page de l'éditeur avec un message d'erreur
+      return res.redirect(`/editeurs/${id}?error=hasGames&count=${jeuxCount}`)
+    }
+
+    // Si aucun jeu n'est associé, procéder à la suppression
+    await prisma.editeur.delete({ where: { id } })
+
+    // Rediriger vers la liste avec un message de succès
+    res.redirect('/editeurs?success=delete')
+  } catch (error) {
+    console.error('Erreur lors de la suppression:', error)
+    
+    // Si c'est une erreur de contrainte de clé étrangère (au cas où)
+    if (error.code === 'P2003') {
+      return res.redirect(`/editeurs/${id}?error=foreignKey`)
+    }
+    
+    // Pour les autres erreurs
+    res.redirect(`/editeurs/${id}?error=unknown`)
+  }
 })
 
 module.exports = router
