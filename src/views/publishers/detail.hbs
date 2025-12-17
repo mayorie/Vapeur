@@ -1,16 +1,57 @@
-<h1>{{publisher.name}}</h1>
+{{! publishers/detail.hbs }}
+{{! Message d'erreur/succès - Ajouté pour la gestion de suppression }}
+{{#if query.error}}
+  <div class="alert {{#if (eq query.error 'hasGames')}}alert-warning{{else}}alert-danger{{/if}}">
+    {{#if (eq query.error 'hasGames')}}
+      <strong>❌ Suppression impossible !</strong><br>
+      Cet éditeur est lié à {{query.count}} jeu(x).<br>
+      Supprimez d'abord ces jeux ou modifiez-les pour leur attribuer un autre éditeur.
+    {{else if (eq query.error 'foreignKey')}}
+      <strong>Erreur !</strong> Impossible de supprimer cet éditeur car il est lié à des jeux.
+    {{else if (eq query.error 'unknown')}}
+      <strong>Erreur !</strong> Une erreur inconnue s'est produite lors de la suppression.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if query.success}}
+  <div class="alert alert-success">
+    {{#if (eq query.success 'update')}}
+      Éditeur modifié avec succès !
+    {{/if}}
+  </div>
+{{/if}}
+
+<h1>{{editeur.nom}}</h1>
+
+<p>
+  <a href="/editeurs/{{editeur.id}}/edit">Modifier</a>
+  <form action="/editeurs/{{editeur.id}}" method="POST" style="display:inline">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" onclick="return confirm('Supprimer {{editeur.nom}} ?\n\n{{#if editeur.jeux.length}}ATTENTION : {{editeur.jeux.length}} jeu(x) sont liés à cet éditeur. La suppression échouera.{{/if}}')">
+      Supprimer
+    </button>
+  </form>
+</p>
 
 <h2>Jeux de cet éditeur</h2>
 
-{{#if publisher.games.length}}
+{{#if editeur.jeux.length}}
   <ul>
-    {{#each publisher.games}}
+    {{#each editeur.jeux}}
       <li>
-        <a href="/games/{{this.id}}">{{this.title}}</a>
-        ({{this.genre.name}})
+        <a href="/jeux/{{this.id}}">{{this.titre}}</a>
+        —
+        {{#each this.genres}}
+          {{this.genre.nom}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+        <small>({{this.dateSortie}})</small>
       </li>
     {{/each}}
   </ul>
 {{else}}
   <p>Il n'y a pas encore de jeux pour cet éditeur.</p>
 {{/if}}
+
+<hr>
+<p><a href="/editeurs">← Retour à la liste des éditeurs</a></p>

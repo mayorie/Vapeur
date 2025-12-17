@@ -57,7 +57,6 @@ app.use((req, res, next) => {
   res.locals.query = req.query;
   next();
 });
-.
 
 // Liste des genres
 app.use('/genres', genreRoutes);
@@ -65,7 +64,7 @@ app.use('/genres', genreRoutes);
 // Jeux
 app.use('/games', gameRoutes);
 
-app.use('/publishers', publisherRoutes);
+app.use('/editeurs', publisherRoutes);
 
 // --- Démarrage du serveur après seed des genres ---
 async function start() {
